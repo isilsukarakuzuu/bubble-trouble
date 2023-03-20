@@ -11,32 +11,31 @@ public class Environment {
     public static double PERIOD_OF_BALL = 15000;
 
     public static int PAUSE_DURATION = 15;
+    public static int TOTAL_GAME_DURATION = 40000;
 
     public static int canvasWidth;
     public static int canvasHeight;
     public static double scaleX;
     public static double scaleY;
-
-    private static long gameStartTime;
+    public static long gameStartTime;
 
     private Bar bar;
-    public Player player;
-    public ArrayList<Ball> balls;
+    private Player player;
+    private ArrayList<Ball> balls;
 
     public Environment(int canvasWidth, int canvasHeight, double scaleX, double scaleY) {
         Environment.canvasWidth = canvasWidth;
         Environment.canvasHeight = canvasHeight;
         Environment.scaleX = scaleX;
         Environment.scaleY = scaleY;
+    }
 
+    private void buildEnvironment(){
         StdDraw.setCanvasSize(canvasWidth, canvasHeight);
         StdDraw.setXscale(0, scaleX);
         StdDraw.setYscale(-1, scaleY);
         StdDraw.enableDoubleBuffering();
 
-    }
-
-    public void buildEnvironment(){
         bar = new Bar();
         player = new Player(scaleX/2);
         this.balls = new ArrayList<>();
@@ -45,12 +44,13 @@ public class Environment {
         balls.add(new Ball(scaleX/3, 0.5, 1, false));
         this.balls.add(new Ball(scaleX/4, 0.5, 2, true));
     }
+
     public boolean run(){
         buildEnvironment();
         gameStartTime = getCurrentTime();
         while (balls.size() > 0) {
             StdDraw.clear(StdDraw.WHITE);
-            StdDraw.picture(scaleX/2, scaleY/2, "background.png", scaleX, scaleY);
+            StdDraw.picture(scaleX/2, scaleY/2, "images/background.png", scaleX, scaleY);
             bar.drawFrame();
             makeKeyEvents();
             player.drawFrame();
@@ -70,7 +70,7 @@ public class Environment {
     }
 
 
-    public void makeKeyEvents(){
+    private void makeKeyEvents(){
         if(StdDraw.isKeyPressed(KeyEvent.VK_LEFT)) {
             player.moveLeft();
         }
@@ -106,74 +106,53 @@ public class Environment {
         return false;
     }
     private void splitBall(Ball ball){
-        if (ball.level > 0) {
-            balls.add(new Ball(ball.getPositionX(), ball.getPositionY(), ball.level - 1, false));
-            balls.add(new Ball(ball.getPositionX(), ball.getPositionY(), ball.level - 1, true));
+        if (ball.getLevel() > 0) {
+            balls.add(new Ball(ball.getPositionX(), ball.getPositionY(), ball.getLevel() - 1, false));
+            balls.add(new Ball(ball.getPositionX(), ball.getPositionY(), ball.getLevel() - 1, true));
         }
         player.setArrowInactive();
         balls.remove(ball);
     }
 
     private boolean gameOverState(){
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setFont( new Font("Helvetica", Font.BOLD, 30) );
-        StdDraw.textLeft(Environment.scaleX/2.5, Environment.scaleY/2, "Game Over!");
-        StdDraw.setFont( new Font("Helvetica", Font.CENTER_BASELINE, 15) );
-        StdDraw.textLeft(Environment.scaleX/2.4, Environment.scaleY/2.3, "To Retry click y");
-        StdDraw.textLeft(Environment.scaleX/2.4, Environment.scaleY/2.6, "To Quit click n");
-
-        StdDraw.show();
-        boolean repeat=false;
-        while (true) {
-            if (StdDraw.isKeyPressed(KeyEvent.VK_Y)) {
-                // Move the rectangle to the left
-                StdDraw.pause(10);
-                repeat=true;
-                break;
-
-            }
-            if (StdDraw.isKeyPressed(KeyEvent.VK_N)) {
-                // Move the rectangle to the left
-                StdDraw.pause(10);
-                repeat=false;
-                break;
-
-            }
-        }
-        return repeat;
+        drawGameControlScreen("GAME OVER!");
+        return checkReplayState();
     }
     private boolean winState(){
+        drawGameControlScreen("YOU WON!");
+        return checkReplayState();
+    }
+
+    private void drawGameControlScreen(String message){
+        StdDraw.picture(Environment.scaleX/2, Environment.scaleY/2.18, "images/game_screen.png", Environment.scaleX/3.8, Environment.scaleY/4);
         StdDraw.setPenColor(StdDraw.BLACK);
         StdDraw.setFont( new Font("Helvetica", Font.BOLD, 30) );
-        StdDraw.textLeft(Environment.scaleX/2.5, Environment.scaleY/2, "WON!!");
-        StdDraw.setFont( new Font("Helvetica", Font.CENTER_BASELINE, 15) );
-        StdDraw.textLeft(Environment.scaleX/2.5, Environment.scaleY/2.3, "To Retry click y");
-        StdDraw.textLeft(Environment.scaleX/2.5, Environment.scaleY/2.6, "To Quit click n");
+        StdDraw.text(Environment.scaleX/2, Environment.scaleY/2, message);
+        StdDraw.setFont( new Font("Helvetica", Font.ITALIC, 15) );
+        StdDraw.text(Environment.scaleX/2, Environment.scaleY/2.3, "To Replay Click \"Y\"");
+        StdDraw.text(Environment.scaleX/2, Environment.scaleY/2.6, "To Quit Click \"N\"");
 
         StdDraw.show();
-        boolean repeat=false;
+    }
+    private boolean checkTimeOver(){
+       return Environment.getTimeDifference()>TOTAL_GAME_DURATION;
+    }
+
+    private boolean checkReplayState(){
         while (true) {
             if (StdDraw.isKeyPressed(KeyEvent.VK_Y)) {
-                // Move the rectangle to the left
                 StdDraw.pause(10);
-                repeat=true;
-                break;
+                return true;
 
             }
             if (StdDraw.isKeyPressed(KeyEvent.VK_N)) {
-                // Move the rectangle to the left
                 StdDraw.pause(10);
-                repeat=false;
-                break;
+                return false;
 
             }
         }
-        return repeat;
     }
-    private boolean checkTimeOver(){
-        if(Environment.getTimeDifference()>40000)return true;
-        return false;
-    }
+
     public static double getPlayerHeight(){
         return scaleY * PLAYER_HEIGHT_SCALEY_RATE;
     }

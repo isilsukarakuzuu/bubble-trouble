@@ -16,7 +16,7 @@ public class Player {
 
     public void drawFrame(){
         arrow.drawFrame();
-        StdDraw.picture(currentPosition, Environment.getPlayerHeight()/2, "player_back.png", Environment.getPlayerWidth(), Environment.getPlayerHeight());
+        StdDraw.picture(currentPosition, Environment.getPlayerHeight()/2, "images/player_back.png", Environment.getPlayerWidth(), Environment.getPlayerHeight());
     }
 
     public void moveRight(){
@@ -42,7 +42,7 @@ public class Player {
     }
 
     public double getArrowEndingPointX(){
-        return arrow.startingPlace;
+        return arrow.getStartingPlace();
     }
     public double getArrowEndingPointY(){
         return arrow.getHeightOfArrow();

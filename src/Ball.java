@@ -5,7 +5,7 @@ public class Ball {
     private final double minPossibleHeight = Environment.getPlayerHeight() * 1.4;
     private final double minPossibleRadius = Environment.scaleY * 0.0175;
     private double maxHeight;
-    public int level;
+    private int level;
     private boolean movingRight;
     private double lastTime;
     private double lastGroundHitPositionX;
@@ -50,13 +50,13 @@ public class Ball {
     public void drawFrame(){
         bounceGround();
         bounceWall();
-        StdDraw.picture(getPositionX(), getPositionY(), "ball.png", getRadius()*2, getRadius()*2);
+        StdDraw.picture(getPositionX(), getPositionY(), "images/ball.png", getRadius()*2, getRadius()*2);
     }
     public double getRadius(){
         return minPossibleRadius * Math.pow(RADIUS_MULTIPLIER, this.level);
     }
 
-    private double getVelocityX(){
+    public double getVelocityX(){
         if(movingRight) return Environment.scaleX / Environment.PERIOD_OF_BALL;
         return -Environment.scaleX / Environment.PERIOD_OF_BALL;
     }
@@ -70,5 +70,8 @@ public class Ball {
 
     private double getTimeDifference(){
         return Environment.getCurrentTime() - lastTime;
+    }
+    public int getLevel() {
+        return level;
     }
 }

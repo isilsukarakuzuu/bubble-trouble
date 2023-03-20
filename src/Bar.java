@@ -1,13 +1,10 @@
+import java.awt.*;
+
 public class Bar {
     public void drawFrame(){
-        if(Environment.getTimeDifference()<12000)
-            StdDraw.setPenColor(StdDraw.YELLOW);
-        else if(Environment.getTimeDifference()<22000)
-            StdDraw.setPenColor(StdDraw.ORANGE);
-        else {
-            StdDraw.setPenColor(StdDraw.RED);
-        }
-        StdDraw.filledRectangle(0.0, -1.0, Environment.scaleX*Environment.getTimeDifference()/40000, 1.0);
+        StdDraw.picture(Environment.scaleX/2, -0.5, "images/bar.png", Environment.scaleX, 1.0);
+        StdDraw.setPenColor(new Color(1, Math.max(1 - (float)Environment.getTimeDifference()/40000, 0),0));
+        StdDraw.filledRectangle(Environment.scaleX/2 - Environment.scaleX/2 *Environment.getTimeDifference()/40000, -0.5, Math.max(0,Environment.scaleX/2 - Environment.scaleX*Environment.getTimeDifference()/40000/2), 0.25);
     }
 }
 

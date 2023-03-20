@@ -1,6 +1,6 @@
 public class Arrow {
     private long lastTime = -1000000009;
-    double startingPlace;
+    private double startingPlace;
 
     public Arrow() {
     }
@@ -13,7 +13,7 @@ public class Arrow {
 
     public void drawFrame(){
         if(!isArrowActive()) return;
-        StdDraw.picture(startingPlace, getHeightOfArrow()/2, "arrow.png", 0.01*Environment.scaleX, getHeightOfArrow());
+        StdDraw.picture(startingPlace, getHeightOfArrow()/2, "images/arrow.png", 0.01*Environment.scaleX, getHeightOfArrow());
     }
     public boolean isArrowActive(){
         return getTimeDifference() < Environment.PERIOD_OF_ARROW;
@@ -31,5 +31,8 @@ public class Arrow {
 
     public void setInactive(){
         lastTime = -1000000009;
+    }
+    public double getStartingPlace() {
+        return startingPlace;
     }
 }
