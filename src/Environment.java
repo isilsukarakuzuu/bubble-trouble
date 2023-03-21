@@ -28,14 +28,14 @@ public class Environment {
         Environment.canvasHeight = canvasHeight;
         Environment.scaleX = scaleX;
         Environment.scaleY = scaleY;
-    }
 
-    private void buildEnvironment(){
         StdDraw.setCanvasSize(canvasWidth, canvasHeight);
         StdDraw.setXscale(0, scaleX);
         StdDraw.setYscale(-1, scaleY);
         StdDraw.enableDoubleBuffering();
+    }
 
+    private void buildEnvironment(){
         bar = new Bar();
         player = new Player(scaleX/2);
         this.balls = new ArrayList<>();
