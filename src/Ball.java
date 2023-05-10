@@ -44,6 +44,7 @@ public class Ball {
     }
 
     public boolean doesIntersect(double pointX, double pointY){
+        // (x – h)^2 + (y – k)^2 = r^2
         return Math.sqrt(Math.pow(getPositionX() - pointX, 2) + Math.pow(getPositionY() - Math.min(pointY, getPositionY()), 2)) <= getRadius();
     }
 

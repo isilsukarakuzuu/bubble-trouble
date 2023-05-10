@@ -99,7 +99,7 @@ public class Environment {
 
     private boolean isPlayerHit(){
         for(Ball ball : balls){
-            if(player.doesIntersect(ball.getPositionX(), ball.getPositionY()-ball.getRadius())){
+            if(player.doesIntersect(ball.getPositionX(), ball.getPositionY(), ball.getRadius())){
                 return true;
             }
         }
